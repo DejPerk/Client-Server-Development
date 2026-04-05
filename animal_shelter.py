@@ -12,10 +12,13 @@ class AnimalShelter(object):
         self.collection = self.database[COL]
 
     def create(self, data: dict):
-        if data and isinstance(data, dict):
-            result = self.collection.insert_one(data)
-            return str(result.inserted_id)
-        raise Exception("Nothing to save, data parameter is empty")
+        try:
+            if data and isinstance(data, dict):
+                result = self.collection.insert_one(data)
+                return str(result.inserted_id)
+            return "Error: Data must be a non-empty dictionary"
+        except Exception as e:
+            return f"Create operation failed: {e}"
 
     def read(self, query: dict = None):
         if query is None: 
